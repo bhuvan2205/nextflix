@@ -4,7 +4,7 @@ import React from "react";
 const Banner = () => {
   return (
     <>
-      <section className="bg-cover h-screen bg-center py-32 w-full flex items-center bg-[url('https://images.pexels.com/photos/1716158/pexels-photo-1716158.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2')]">
+      <section className="bg-cover h-screen bg-center py-32 w-full flex items-center bg-[url('https://images.pexels.com/photos/2510428/pexels-photo-2510428.jpeg')]">
         <div className="container mx-auto flex items-center h-full text-white">
           <div className="w-1/2">
             <h1 className="text-5xl font-medium mb-6 uppercase font-sans">

@@ -43,7 +43,7 @@ const login = () => {
     };
     router.events.on("routeChangeStart", handleRouteChange);
     router.events.on("routeChangeError", handleRouteChangeError);
-    
+
     return () => {
       router.events.off("routeChangeStart", handleRouteChange);
       router.events.off("routeChangeError", handleRouteChangeError);
@@ -55,9 +55,9 @@ const login = () => {
         <title>Login-Nextflix</title>
       </Head>
       <div className="h-screen bg-cover bg-center bg-[url('https://images.pexels.com/photos/7234275/pexels-photo-7234275.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2')]">
-        <div className="absolute bg-slate-950 rounded-lg h-fit overflow-hidden top-[50%] left-[50%] p-16 opacity-90 translate-x-[-50%] translate-y-[-50%]">
-          <h2 className="font-bold text-4xl pb-8 text-white">Sign In</h2>
-          <form onSubmit={handleSubmit} className="w-fit min-w-[300px]">
+        <div className="absolute bg-slate-950 rounded-lg h-fit overflow-hidden top-[50%] left-[50%] p-8 md:p-16 opacity-90 translate-x-[-50%] translate-y-[-50%]">
+          <h2 className="font-bold text-3xl md:text-4xl pb-8 text-white">Sign In</h2>
+          <form onSubmit={handleSubmit} className="w-fit min-w-[250px] md:min-w-[300px]">
             <div>
               <input
                 type="text"
