@@ -1,12 +1,8 @@
-import Layout from "@/components/layout/Layout";
-import Banner from "@/components/ui/Banner";
-import Carousel from "@/components/ui/Carousel";
 import Head from "next/head";
-import { magic } from "../lib/magic-client";
-import { getPexelsVideos } from "../lib/videos";
-import { useEffect, useState } from "react";
-import { ROUTE_LOGIN } from "@/constants/endpoint";
-import { useRouter } from "next/router";
+import Banner from "@/components/ui/Banner";
+import Layout from "@/components/layout/Layout";
+import Carousel from "@/components/ui/Carousel";
+import { getPexelsVideos, getPopularVideos, getVideos } from "../lib/videos";
 
 export default function Home({
   disneyVideos,
@@ -14,33 +10,6 @@ export default function Home({
   productivityVideos,
   travelVideos,
 }) {
-  const router = useRouter();
-  const [loading, setLoading] = useState(true);
-  useEffect(() => {
-    (async () => {
-      const isUserLoggedIn = await magic.user.isLoggedIn();
-      if (!isUserLoggedIn) {
-        router.push(ROUTE_LOGIN);
-      }
-    })();
-    const handleRouteComplete = () => {
-      setLoading(false);
-    };
-    router.events.on("routeChangeComplete", handleRouteComplete);
-
-    return () => {
-      router.events.off("routeChangeComplete", handleRouteComplete);
-    };
-  }, []);
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center space-x-2 h-screen w-full">
-        <div className="w-4 h-4 rounded-full animate-pulse dark:bg-red-600"></div>
-        <div className="w-4 h-4 rounded-full animate-pulse dark:bg-red-600"></div>
-        <div className="w-4 h-4 rounded-full animate-pulse dark:bg-red-600"></div>
-      </div>
-    );
-  }
   return (
     <>
       <Head>
@@ -69,10 +38,10 @@ export default function Home({
 }
 
 export const getServerSideProps = async () => {
-  const disneyVideos = await getPexelsVideos("travel");
-  const popularVideos = await getPexelsVideos("popular");
-  const productivityVideos = await getPexelsVideos("productivity");
-  const travelVideos = await getPexelsVideos("travel");
+  const disneyVideos = await getVideos("disney");
+  const popularVideos = await getPopularVideos();
+  const productivityVideos = await getVideos("productivity");
+  const travelVideos = await getVideos("travel");
 
   return {
     props: {

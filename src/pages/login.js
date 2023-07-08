@@ -43,7 +43,7 @@ const login = () => {
     };
     router.events.on("routeChangeStart", handleRouteChange);
     router.events.on("routeChangeError", handleRouteChangeError);
-
+    
     return () => {
       router.events.off("routeChangeStart", handleRouteChange);
       router.events.off("routeChangeError", handleRouteChangeError);

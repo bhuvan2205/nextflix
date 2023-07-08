@@ -7,9 +7,9 @@ const CarouselItem = ({
   size = "medium",
 }) => {
   const sizeMap = {
-    large: "h-96 w-60",
-    medium: "h-64 w-80",
-    small: "h-44 w-60",
+    large: "h-40 w-64 sm:h-96 sm:w-60",
+    medium: "h-40 w-64 sm:h-64 sm:w-80",
+    small: "h-40 w-64 sm:h-44 sm:w-46",
   };
   return (
     <>
