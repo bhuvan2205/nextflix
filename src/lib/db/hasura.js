@@ -8,27 +8,16 @@ const headers = {
   "x-hasura-admin-secret": token,
 };
 
-const userQuery = `{
-    users {
-        email
-        id
-        issuer
-        publicAddress
-    }
-}`;
-
-const graphqlQuery = {
-  operationName: "fetchUsers",
-  query: `query fetchUsers ${userQuery}`,
-  variables: {},
-};
-
-export const fetchUsers = async () => {
+export const fetchUsers = async (operationName="query", query) => {
   try {
     const response = await axios({
       url: endPoint,
       method: "post",
-      data: graphqlQuery,
+      data: {
+        operationName,
+        query: `query ${operationName} ${query}`,
+        variables: {},
+      },
       headers: headers,
     });
     const { data } = response;

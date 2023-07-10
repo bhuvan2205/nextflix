@@ -11,7 +11,15 @@ export default function Home({
   productivityVideos,
   travelVideos,
 }) {
-  fetchUsers();
+  const userQuery = `{
+    users {
+        email
+        id
+        issuer
+        publicAddress
+    }
+  }`;
+  fetchUsers("fetchUsers", userQuery);
   return (
     <>
       <Head>
