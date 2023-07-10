@@ -2,7 +2,8 @@ import Head from "next/head";
 import Banner from "@/components/ui/Banner";
 import Layout from "@/components/layout/Layout";
 import Carousel from "@/components/ui/Carousel";
-import { getPexelsVideos, getPopularVideos, getVideos } from "../lib/videos";
+import { fetchUsers } from "@/lib/db/hasura";
+import { getPopularVideos, getVideos } from "../lib/videos";
 
 export default function Home({
   disneyVideos,
@@ -10,6 +11,7 @@ export default function Home({
   productivityVideos,
   travelVideos,
 }) {
+  fetchUsers();
   return (
     <>
       <Head>

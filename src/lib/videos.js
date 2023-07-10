@@ -1,12 +1,20 @@
 import { createClient } from "pexels";
 import axios from "axios";
+import videos from "../data/videos.json";
+
+const API_KEY = process.env.YOUTUBE_API_KEY;
+const ENV = process.env.DEV_MODE;
+
+export const fetchVideos = async (query) => {
+  const url = `https://youtube.googleapis.com/youtube/v3/search?part=snippet&q=${query}&key=${API_KEY}`;
+  const response = await axios.get(url);
+  const { data } = response;
+  return data;
+};
 
 export const getVideos = async (query = "disney") => {
-  const API_KEY = process.env.YOUTUBE_API_KEY;
   try {
-    const url = `https://youtube.googleapis.com/youtube/v3/search?part=snippet&q=${query}&key=${API_KEY}`;
-    const response = await axios.get(url);
-    const { data } = response;
+    const data = ENV === "dev" ? videos : await fetchVideos(query);
     return data?.items?.map((item) => {
       return {
         title: item?.snippet?.title || "",
@@ -15,7 +23,6 @@ export const getVideos = async (query = "disney") => {
       };
     });
   } catch (error) {
-    console.log({ error });
     const emptyResults = [];
     for (let i = 0; i < 5; i++) {
       emptyResults.push({});
@@ -24,15 +31,40 @@ export const getVideos = async (query = "disney") => {
   }
 };
 
-export const getPopularVideos = async () => {
+export const getVideoById = async (id = "0_44XEVOwek") => {
   const API_KEY = process.env.YOUTUBE_API_KEY;
   try {
-    const url = `https://youtube.googleapis.com/youtube/v3/videos?part=snippet%2CcontentDetails%2Cstatistics&chart=mostPopular&regionCode=US&key=${API_KEY}`;
-
+    const url = `https://youtube.googleapis.com/youtube/v3/videos?part=snippet%2CcontentDetails%2Cstatistics&id=${id}&key=${API_KEY}`;
     const response = await axios.get(url);
     const { data } = response;
+    return data.items.map((item) => {
+      return {
+        views: item?.statistics?.viewCount,
+        likes: item?.statistics?.likeCount,
+        favs: item?.statistics?.favoriteCount,
+        publishTime: item?.snippet?.publishedAt,
+        title: item?.snippet?.title,
+        channel: item?.snippet?.channelTitle,
+        description: item?.snippet?.description,
+      };
+    });
+  } catch (error) {
+    console.log({ error });
+  }
+};
+
+export const fetchPopularVideos = async () => {
+  const url = `https://youtube.googleapis.com/youtube/v3/videos?part=snippet%2CcontentDetails%2Cstatistics&chart=mostPopular&regionCode=US&key=${API_KEY}`;
+
+  const response = await axios.get(url);
+  const { data } = response;
+  return data;
+};
+
+export const getPopularVideos = async () => {
+  try {
+    const data = ENV === "dev" ? videos : await fetchPopularVideos();
     return data?.items?.map((item) => {
-      console.log({ item });
       return {
         title: item?.snippet?.title || "",
         image: item?.snippet?.thumbnails?.high?.url || "",

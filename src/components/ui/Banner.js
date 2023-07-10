@@ -4,14 +4,13 @@ import React from "react";
 const Banner = () => {
   const router = useRouter();
   const hanleClick = () => {
-    console.log("clicked");
-    router.push("/video/u6zaDW8NJZc");
+    router.push("/video/0_44XEVOwek");
   };
   return (
     <>
-      <section className="bg-cover h-screen bg-center py-32 w-full flex items-center bg-[url('https://images.pexels.com/photos/2510428/pexels-photo-2510428.jpeg')]">
+      <section className="bg-cover h-screen bg-top py-32 w-full flex items-center bg-[url('https://images.pexels.com/photos/2510428/pexels-photo-2510428.jpeg')]">
         <div className="container mx-auto flex items-center h-full text-white">
-          <div className="w-full md:w-1/2 px-2 md:px-0">
+          <div className="w-full md:w-1/2 px-4 md:px-0">
             <h1 className="text-5xl font-medium mb-6 uppercase font-sans">
               Unlimited movies, <br /> TV shows and more
             </h1>
@@ -37,12 +36,12 @@ const Banner = () => {
               </svg>
             </button>
           </div>
-          <div className="w-1/2 pl-16 hidden md:block">
+          {/* <div className="w-1/2 pl-16 hidden md:block">
             <div
               className="h-64 w-full object-cover rounded-xl bg-[url('https://images.pexels.com/photos/4008733/pexels-photo-4008733.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2')] bg-center bg-cover"
               alt="Layout Image"
             />
-          </div>
+          </div> */}
         </div>
       </section>
     </>

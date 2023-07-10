@@ -1,30 +1,18 @@
 import { ROUTE_HOME } from "@/constants/endpoint";
-import { getPexelVideo } from "@/lib/videos";
+import { getVideoById } from "@/lib/videos";
 import { useRouter } from "next/router";
-import React, { useEffect } from "react";
 import Modal from "react-modal";
 
 Modal.setAppElement("#__next");
 
-const Video = () => {
+const Video = ({ video }) => {
   const router = useRouter();
-  const { ID } = router.query || {};
+  const { Id } = router.query || {};
   const handleClose = () => {
     router.push(ROUTE_HOME);
   };
 
-  const video = {
-    views: 12200,
-    likes: 6000,
-    publishTime: "1990-12-03",
-    title: "Collection resource",
-    channel: "Paramopunt pictures",
-    description:
-      "Pexels Collections are a way to group specific photos and videos into one unified gallery. This can be useful if, for example, you want to expose a specific subset of Pexels content to your users. You can access ",
-  };
-
-  const { description, title, publishTime, views, channel, likes } =
-    video || {};
+  const { description, title, publishTime, views, likes } = video || {};
   return (
     <div className="flex flex-col items-center justify-center h-screen max-w-[60%] mx-auto">
       <div>
@@ -32,7 +20,7 @@ const Video = () => {
           <iframe
             id="player"
             type="text/html"
-            src={`http://www.youtube.com/embed/${ID}?enablejsapi=1&origin=http://example.com&autoplay=1&rel=1`}
+            src={`http://www.youtube.com/embed/${Id}?enablejsapi=1&origin=http://example.com&autoplay=1&rel=1`}
             frameborder="0"
             className="h-96 min-w-[360px] w-full"
           ></iframe>
@@ -43,7 +31,7 @@ const Video = () => {
             <h6 className="text-xl font-bold uppercase text-green-400 py-4">
               {title}
             </h6>
-            <p className="text-lg text-justify">{description}</p>
+            <p className="text-lg text-justify line-clamp-4">{description}</p>
           </div>
           <div className="stats flex flex-col">
             <div className="stat">
@@ -63,7 +51,9 @@ const Video = () => {
                 </svg>
               </div>
               <div className="stat-title">Total Likes</div>
-              <div className="stat-value text-primary">{likes / 1000}K</div>
+              <div className="stat-value text-primary">
+                {(likes / 1000).toFixed(2)}K
+              </div>
               <div className="stat-desc">21% more than last month</div>
             </div>
 
@@ -84,8 +74,10 @@ const Video = () => {
                 </svg>
               </div>
               <div className="stat-title">Page Views</div>
-              <div className="stat-value text-secondary">{views / 1000}K</div>
-              <div className="stat-desc">21% more than last month</div>
+              <div className="stat-value text-secondary">
+                {(views / 1000).toFixed(2)}K
+              </div>
+              <div className="stat-desc">33% more than last month</div>
             </div>
           </div>
         </div>
@@ -117,3 +109,22 @@ const Video = () => {
 };
 
 export default Video;
+
+export async function getStaticProps(context) {
+  const { Id } = context.params || {};
+  const videoArray = await getVideoById(Id);
+  return {
+    props: {
+      video: videoArray?.length > 0 ? videoArray[0] : {},
+    },
+  };
+}
+
+export async function getStaticPaths() {
+  const videos = ["8n61UG708S4", "0_44XEVOwek"];
+  const paths = videos.map((Id) => ({
+    params: { Id },
+  }));
+
+  return { paths, fallback: "blocking" };
+}
