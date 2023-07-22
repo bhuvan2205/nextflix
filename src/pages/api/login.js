@@ -1,6 +1,7 @@
 import { createNewuser, isNewUser } from "@/lib/db/hasura";
 import { mAdmin } from "@/lib/magic-server";
 import { getToken } from "@/utils/getToken";
+import { setTokenCookie } from "@/utils/setCookie";
 
 const login = async (req, res) => {
   switch (req.method) {
@@ -13,10 +14,14 @@ const login = async (req, res) => {
         const newUser = await isNewUser(token, metadata?.issuer);
         if (newUser) {
           const createNewUser = await createNewuser(token, metadata);
-          res.status(201).json({ userCreated: createNewUser });
+          // Set Cookie - New Users
+          setTokenCookie(token, res);
+          res.status(201).json({ data: createNewUser });
         } else {
-          return res.json({
-            data: "Already user exists or Issue while creating User",
+          // Set Cookie - Existing users
+          setTokenCookie(token, res);
+          res.json({
+            data: "Already user exists",
           });
         }
       } catch (error) {

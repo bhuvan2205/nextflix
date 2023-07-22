@@ -1,7 +1,9 @@
 import axios from "axios";
 
-const endPoint = "https://nextflix-2023.hasura.app/v1/graphql";
+// Hasura graphQL endpoint
+const endPoint = process.env.GRAPHQL_ENDPOINT;
 
+// Function to execute graphQL query and mutation
 export const fetchGraphQL = async (
   operationName = "Myquery",
   query,
@@ -30,6 +32,8 @@ export const fetchGraphQL = async (
   }
 };
 
+// To find the loggedIn User is new to Hasura
+
 export const isNewUser = async (token, issuer) => {
   const isExistingUser = `{
     users(where: {issuer: {_eq: "${issuer}"}}) {
@@ -40,10 +44,10 @@ export const isNewUser = async (token, issuer) => {
 `;
 
   const response = await fetchGraphQL("isNewUser", isExistingUser, token, true);
-  console.log(response);
   return response?.data?.users?.length === 0 ? true : false;
 };
 
+// Create new User in Hasura
 export const createNewuser = async (token, metadata) => {
   const { issuer, email, publicAddress } = metadata || {};
   const createUserMutation = `
@@ -65,10 +69,5 @@ export const createNewuser = async (token, metadata) => {
     token,
     false
   );
-  if (response?.errors) {
-    console.log(response?.error);
-  } else {
-    console.log(response?.users);
-  }
-  return response?.data?.users?.length === 0 ? false : true;
+  return response?.data;
 };

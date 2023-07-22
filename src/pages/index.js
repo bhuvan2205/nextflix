@@ -2,7 +2,6 @@ import Head from "next/head";
 import Banner from "@/components/ui/Banner";
 import Layout from "@/components/layout/Layout";
 import Carousel from "@/components/ui/Carousel";
-import { fetchUsers, isUser } from "@/lib/db/hasura";
 import { getPopularVideos, getVideos } from "../lib/videos";
 
 export default function Home({

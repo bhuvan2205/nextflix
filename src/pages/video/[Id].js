@@ -1,4 +1,4 @@
-import { ROUTE_HOME } from "@/constants/endpoint";
+import { ROUTE_HOME } from "@/constants/endpoints";
 import { getVideoById } from "@/lib/videos";
 import { useRouter } from "next/router";
 import Modal from "react-modal";

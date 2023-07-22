@@ -1,8 +1,10 @@
-import { ROUTE_HOME } from "@/constants/endpoint";
+import { ROUTE_HOME } from "@/constants/endpoints";
 import { magic } from "../lib/magic-client";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import { LOGIN_ENDPOINT } from "@/constants/api-endpoints";
+import axios from "axios";
 
 const login = () => {
   const [email, setEmail] = useState("");
@@ -25,7 +27,22 @@ const login = () => {
       try {
         const DIDToken = await magic.auth.loginWithMagicLink({ email });
         if (DIDToken) {
-          router.push(ROUTE_HOME);
+          const headers = {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${DIDToken}`,
+          };
+          const response = await axios({
+            url: LOGIN_ENDPOINT,
+            method: "post",
+            data: {},
+            headers: headers,
+          });
+          const { data } = response || {};
+          if (data) {
+            router.push(ROUTE_HOME);
+          } else {
+            console.log("Something went wrong while LoggedIn");
+          }
         }
       } catch (e) {
         setLoading(false);

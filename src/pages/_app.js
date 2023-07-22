@@ -2,7 +2,7 @@ import '@/styles/globals.css';
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { magic } from "../lib/magic-client";
-import { ROUTE_LOGIN } from "@/constants/endpoint";
+import { ROUTE_LOGIN } from "@/constants/endpoints";
 
 export default function App({ Component, pageProps }) {
   const router = useRouter();

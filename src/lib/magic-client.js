@@ -1,5 +1,6 @@
 import { Magic } from "magic-sdk";
 
+// Magic client for the browser side 
 export const createMagic = () => {
   return (
     typeof window !== "undefined" &&

@@ -1,5 +1,6 @@
 const jwt = require("jsonwebtoken");
 
+// Generate jwt token for loggedIn users
 export const getToken = (metadata) => {
   const signature = {
     ...metadata,
