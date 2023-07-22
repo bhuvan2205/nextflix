@@ -16,11 +16,11 @@ const login = async (req, res) => {
           const createNewUser = await createNewuser(token, metadata);
           // Set Cookie - New Users
           setTokenCookie(token, res);
-          res.status(201).json({ data: createNewUser });
+          return res.status(201).json({ data: createNewUser });
         } else {
           // Set Cookie - Existing users
           setTokenCookie(token, res);
-          res.json({
+          return res.status(200).json({
             data: "Already user exists",
           });
         }
