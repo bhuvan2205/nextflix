@@ -1,28 +1,74 @@
 import axios from "axios";
 
 const endPoint = "https://nextflix-2023.hasura.app/v1/graphql";
-const token = process.env.NEXT_PUBLIC_SECRET_HASURA_KEY;
-const headers = {
-  "Content-Type": "application/json",
-  "Access-Control-Allow-Origin": "*",
-  "x-hasura-admin-secret": token,
-};
 
-export const fetchUsers = async (operationName="query", query) => {
+export const fetchGraphQL = async (
+  operationName = "Myquery",
+  query,
+  token,
+  isQuery = true
+) => {
   try {
+    const headers = {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    };
     const response = await axios({
       url: endPoint,
       method: "post",
       data: {
         operationName,
-        query: `query ${operationName} ${query}`,
+        query: `${isQuery ? "query" : "mutation"} ${operationName} ${query}`,
         variables: {},
       },
       headers: headers,
     });
     const { data } = response;
-    console.log({ data });
+    return data;
   } catch (error) {
-    console.log(error.message);
+    return error;
   }
+};
+
+export const isNewUser = async (token, issuer) => {
+  const isExistingUser = `{
+    users(where: {issuer: {_eq: "${issuer}"}}) {
+      email
+      id
+    }
+  }
+`;
+
+  const response = await fetchGraphQL("isNewUser", isExistingUser, token, true);
+  console.log(response);
+  return response?.data?.users?.length === 0 ? true : false;
+};
+
+export const createNewuser = async (token, metadata) => {
+  const { issuer, email, publicAddress } = metadata || {};
+  const createUserMutation = `
+    {
+      insert_users_one(object: {
+        email: "${email}",
+        issuer: "${issuer}",
+        publicAddress: "${publicAddress}"
+      }) {
+        email
+        id
+      }
+    }
+  `;
+
+  const response = await fetchGraphQL(
+    "createUser",
+    createUserMutation,
+    token,
+    false
+  );
+  if (response?.errors) {
+    console.log(response?.error);
+  } else {
+    console.log(response?.users);
+  }
+  return response?.data?.users?.length === 0 ? false : true;
 };

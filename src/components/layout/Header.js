@@ -22,6 +22,8 @@ const Header = () => {
     (async () => {
       try {
         const { email } = await magic.user.getMetadata();
+        const idToken = await magic.user.getIdToken();
+        console.log({ idToken });
         if (email) {
           setEmailId(email);
         }

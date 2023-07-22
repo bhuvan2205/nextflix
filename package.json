@@ -9,11 +9,13 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@magic-sdk/admin": "^2.0.0",
     "axios": "^1.4.0",
     "classnames": "^2.3.2",
     "eslint": "8.43.0",
     "eslint-config-next": "13.4.7",
     "framer-motion": "^10.12.17",
+    "jsonwebtoken": "^9.0.1",
     "magic-sdk": "^18.2.0",
     "next": "13.4.7",
     "pexels": "^1.4.0",

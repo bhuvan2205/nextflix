@@ -2,7 +2,7 @@ import Head from "next/head";
 import Banner from "@/components/ui/Banner";
 import Layout from "@/components/layout/Layout";
 import Carousel from "@/components/ui/Carousel";
-import { fetchUsers } from "@/lib/db/hasura";
+import { fetchUsers, isUser } from "@/lib/db/hasura";
 import { getPopularVideos, getVideos } from "../lib/videos";
 
 export default function Home({
@@ -11,15 +11,7 @@ export default function Home({
   productivityVideos,
   travelVideos,
 }) {
-  const userQuery = `{
-    users {
-        email
-        id
-        issuer
-        publicAddress
-    }
-  }`;
-  fetchUsers("fetchUsers", userQuery);
+  
   return (
     <>
       <Head>

@@ -12,7 +12,7 @@ const Carousel = ({ videos = [], size, title }) => {
         {videos?.map((item, index) => {
           const id = item?.id?.videoId || item?.id;
           return (
-            <Link href={`/video/${id}`}>
+            <Link href={`/video/${id}`} key={index}>
               <CarouselItem
                 key={item?.id || index}
                 imgUrl={item?.image}
