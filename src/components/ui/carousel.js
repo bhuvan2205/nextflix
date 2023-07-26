@@ -1,8 +1,8 @@
 import React from "react";
-import CarouselItem from "./CarouselItem";
 import Link from "next/link";
 import { darkTheme } from "@/data/atoms/theme";
 import { useAtom } from "jotai";
+import CarouselItem from "./carouselItem";
 
 const Carousel = ({ videos = [], size, title }) => {
   const [value] = useAtom(darkTheme);

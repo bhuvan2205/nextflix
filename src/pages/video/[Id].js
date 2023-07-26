@@ -1,22 +1,31 @@
+import Dislike from "@/components/icons/dislike";
+import HeartIcon from "@/components/icons/heart";
+import Home from "@/components/icons/home";
+import LikeIcon from "@/components/icons/like";
+import ThunderIcon from "@/components/icons/thunder";
+import { DEFAULT_LIKE_DISLIKE } from "@/constants/default";
 import { ROUTE_HOME } from "@/constants/endpoints";
 import { getVideoById } from "@/lib/videos";
 import { useRouter } from "next/router";
+import { useState } from "react";
 import Modal from "react-modal";
 
 Modal.setAppElement("#__next");
 
 const Video = ({ video }) => {
   const router = useRouter();
+  const [like, setLike] = useState(DEFAULT_LIKE_DISLIKE);
   const { Id } = router.query || {};
   const handleClose = () => {
     router.push(ROUTE_HOME);
   };
+  const [descView, setDescView] = useState(true);
 
   const { description, title, publishTime, views, likes } = video || {};
   return (
-    <div className="flex flex-col items-center justify-center h-screen max-w-[60%] mx-auto">
+    <div className="flex flex-col items-center justify-center min-h-screen max-w-[60%] mx-auto">
       <div>
-        <div className="rounded-md shadow-lg bg-gray-900 text-gray-100 overflow-hidden">
+        <div className="rounded-md shadow-lg bg-gray-900 text-gray-100 overflow-hidden relative">
           <iframe
             id="player"
             type="text/html"
@@ -24,6 +33,22 @@ const Video = ({ video }) => {
             frameborder="0"
             className="h-96 min-w-[360px] w-full"
           ></iframe>
+          <div className="absolute top-[60%] left-[10%]">
+            <div className="flex gap-4">
+              <button
+                className="rounded-full p-2 w-12 h-12 border-solid border-2 border-white  flex items-center justify-center"
+                onClick={() => setLike(1)}
+              >
+                <LikeIcon fill={like === 1 ? "#00fff2" : "#000"} />
+              </button>
+              <button
+                className="rounded-full p-2 w-12 h-12 border-solid border-2 border-white  flex items-center justify-center"
+                onClick={() => setLike(2)}
+              >
+                <Dislike fill={like === 2 ? "#f00524" : "#000"} />
+              </button>
+            </div>
+          </div>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-2 shadow-lg p-4">
           <div className="py-4">
@@ -31,24 +56,24 @@ const Video = ({ video }) => {
             <h6 className="text-xl font-bold uppercase text-green-400 py-4">
               {title}
             </h6>
-            <p className="text-lg text-justify line-clamp-4">{description}</p>
+            <p
+              className={`text-lg text-justify ${
+                descView ? "overflow-scroll h-60" : "line-clamp-4"
+              }`}
+            >
+              {description}
+            </p>
+            <button
+              onClick={() => setDescView(!descView)}
+              className="badge badge-accent float-right mt-2"
+            >
+              {descView ? "Read less" : "Read more"}
+            </button>
           </div>
           <div className="stats flex flex-col">
             <div className="stat">
               <div className="stat-figure text-primary">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  className="inline-block w-8 h-8 stroke-current"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
-                  ></path>
-                </svg>
+                <HeartIcon />
               </div>
               <div className="stat-title">Total Likes</div>
               <div className="stat-value text-primary">
@@ -59,19 +84,7 @@ const Video = ({ video }) => {
 
             <div className="stat">
               <div className="stat-figure text-secondary">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  className="inline-block w-8 h-8 stroke-current"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M13 10V3L4 14h7v7l9-11h-7z"
-                  ></path>
-                </svg>
+                <ThunderIcon />
               </div>
               <div className="stat-title">Page Views</div>
               <div className="stat-value text-secondary">
@@ -84,24 +97,11 @@ const Video = ({ video }) => {
       </div>
       <div className="absolute bottom-[10%] right-[10%]">
         <div
-          className="h-12 w-12 bg-secondary hover:bg-secondary-focus rounded-full flex items-center justify-center cursor-pointer tooltip tooltip-top"
+          className="h-12 w-12 bg-secondary hover:bg-secondary-focus rounded-full items-center justify-center cursor-pointer tooltip tooltip-top hidden sm:flex"
           data-tip="Go to home?"
           onClick={handleClose}
         >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth={1.5}
-            stroke="#fff"
-            className="w-6 h-6"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25"
-            />
-          </svg>
+          <Home />
         </div>
       </div>
     </div>

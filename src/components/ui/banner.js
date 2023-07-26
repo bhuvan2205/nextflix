@@ -1,5 +1,6 @@
 import { useRouter } from "next/router";
 import React from "react";
+import PlayIcon from "../icons/play";
 
 const Banner = () => {
   const router = useRouter();
@@ -20,20 +21,7 @@ const Banner = () => {
             </p>
             <button onClick={hanleClick} className="btn btn-secondary px-6">
               Play
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={1.5}
-                stroke="currentColor"
-                className="w-6 h-6"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.348a1.125 1.125 0 010 1.971l-11.54 6.347a1.125 1.125 0 01-1.667-.985V5.653z"
-                />
-              </svg>
+              <PlayIcon />
             </button>
           </div>
           {/* <div className="w-1/2 pl-16 hidden md:block">

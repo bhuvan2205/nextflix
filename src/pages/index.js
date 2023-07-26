@@ -1,8 +1,8 @@
 import Head from "next/head";
-import Banner from "@/components/ui/Banner";
-import Layout from "@/components/layout/Layout";
-import Carousel from "@/components/ui/Carousel";
 import { getPopularVideos, getVideos } from "../lib/videos";
+import Layout from "@/components/layout/layout";
+import Carousel from "@/components/ui/carousel";
+import Banner from "@/components/ui/banner";
 
 export default function Home({
   disneyVideos,

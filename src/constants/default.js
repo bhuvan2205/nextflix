@@ -1,0 +1,1 @@
+export const DEFAULT_LIKE_DISLIKE = 0

@@ -1,8 +1,8 @@
 import React from "react";
-import Footer from "./Footer";
-import Header from "./Header";
 import { useAtom } from "jotai";
 import { darkTheme } from "@/data/atoms/theme";
+import Header from "./header";
+import Footer from "./footer";
 
 const Layout = ({ children }) => {
   const [value] = useAtom(darkTheme);
