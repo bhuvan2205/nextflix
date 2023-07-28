@@ -1,7 +1,7 @@
 import { createNewuser, isNewUser } from "@/lib/db/hasura";
+import { getToken } from "@/lib/getToken";
 import { mAdmin } from "@/lib/magic-server";
-import { getToken } from "@/utils/getToken";
-import { setTokenCookie } from "@/utils/setCookie";
+import { setTokenCookie } from "@/lib/setCookie";
 
 const handler = async (req, res) => {
   switch (req.method) {
