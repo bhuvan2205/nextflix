@@ -26,6 +26,7 @@ const login = () => {
       setLoading(true);
       try {
         const DIDToken = await magic.auth.loginWithMagicLink({ email });
+        console.log({ DIDToken });
         if (DIDToken) {
           const headers = {
             "Content-Type": "application/json",
@@ -71,8 +72,8 @@ const login = () => {
         <title>Login-Nextflix</title>
       </Head>
       <div className="h-screen bg-cover bg-center bg-[url('https://images.pexels.com/photos/821749/pexels-photo-821749.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2')]">
-        <div className="absolute bg-slate-950 rounded-lg h-fit overflow-hidden top-[50%] left-[50%] p-8 md:p-16 opacity-90 translate-x-[-50%] translate-y-[-50%]">
-          <h2 className="font-bold text-3xl md:text-4xl pb-8 text-white">
+        <div className="absolute bg-slate-950 rounded-lg h-fit overflow-hidden top-[50%] left-[50%] p-8 sm:p-12 md:p-16 opacity-90 translate-x-[-50%] translate-y-[-50%]">
+          <h2 className="font-bold text-3xl md:text-4xl pb-8 sm:pb-12 text-white">
             Sign In
           </h2>
           <form

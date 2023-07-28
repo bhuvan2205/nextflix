@@ -69,5 +69,97 @@ export const createNewuser = async (token, metadata) => {
     token,
     false
   );
+  if (response?.errors) {
+    console.log(response.errors);
+  }
+  return response?.data;
+};
+
+// To find the videoID to Hasura
+
+export const isExistingVideo = async (token, issuer, videoID) => {
+  const existingVideo = `
+  {
+    stats(where: {userId: {_eq: "${issuer}"}, videoId: {_eq: "${videoID}"}}) {
+      favourited
+      id
+      userId
+      videoId
+      watched
+    }
+  }
+`;
+
+  const response = await fetchGraphQL(
+    "existingVideo",
+    existingVideo,
+    token,
+    true
+  );
+  if (response?.errors) {
+    console.log(response.errors);
+  }
+  return response?.data?.stats?.length > 0;
+};
+
+// Create new Stats in Hasura
+export const createNewStats = async (
+  token,
+  issuer,
+  videoID,
+  isWatched,
+  isFavourited
+) => {
+  const createStatsMutation = ` 
+  {
+    insert_stats_one(object: {favourited: ${isFavourited}, userId: "${issuer}", videoId: "${videoID}", watched: ${isWatched}}) {
+      userId
+      id
+      videoId
+      favourited
+      watched
+    }
+  }
+`;
+
+  const response = await fetchGraphQL(
+    "createStats",
+    createStatsMutation,
+    token,
+    false
+  );
+  if (response?.errors) {
+    console.log(response.errors);
+  }
+  console.log({response});
+  return response?.data;
+};
+
+// Update Video Stats in Hasura
+export const updateVideoStats = async (
+  token,
+  issuer,
+  videoID,
+  isWatched,
+  isFavourited
+) => {
+  const updateStatsMutation = `
+  mutation MyMutation {
+    update_stats(where: {userId: {_eq: "${issuer}"}, videoId: {_eq: "${videoID}"}}, _set: {favourited: ${isFavourited}, watched: ${isWatched}}) {
+      id
+      userId
+    }
+  }
+`;
+
+  const response = await fetchGraphQL(
+    "updateStats",
+    updateStatsMutation,
+    token,
+    false
+  );
+  if (response?.errors) {
+    console.log(response.errors);
+  }
   return response?.data;
 };

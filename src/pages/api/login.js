@@ -3,7 +3,7 @@ import { mAdmin } from "@/lib/magic-server";
 import { getToken } from "@/utils/getToken";
 import { setTokenCookie } from "@/utils/setCookie";
 
-const login = async (req, res) => {
+const handler = async (req, res) => {
   switch (req.method) {
     case "POST":
       try {
@@ -33,4 +33,4 @@ const login = async (req, res) => {
   }
 };
 
-export default login;
+export default handler;
