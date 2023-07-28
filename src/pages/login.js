@@ -26,7 +26,6 @@ const login = () => {
       setLoading(true);
       try {
         const DIDToken = await magic.auth.loginWithMagicLink({ email });
-        console.log({ DIDToken });
         if (DIDToken) {
           const headers = {
             "Content-Type": "application/json",

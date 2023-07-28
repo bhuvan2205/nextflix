@@ -1,6 +1,7 @@
 import { createClient } from "pexels";
 import axios from "axios";
 import videos from "../data/videos.json";
+import { STATS_ENDPOINT } from "@/constants/api-endpoints";
 
 const API_KEY = process.env.YOUTUBE_API_KEY;
 const ENV = process.env.DEV_MODE;
@@ -91,5 +92,52 @@ export const getPexelsVideos = async (query = "disney") => {
       emptyResults.push({});
     }
     return emptyResults;
+  }
+};
+
+export const fetchVideoData = async (Id, setLike) => {
+  try {
+    const headers = {
+      "Content-Type": "application/json",
+    };
+    const response = await axios({
+      url: `${STATS_ENDPOINT}?videoId=${Id}`,
+      method: "get",
+      headers: headers,
+    });
+    const { data } = response || {};
+    if (data.isVideoExists) {
+      setLike(data?.video.stats?.[0].favourited);
+    } else {
+      console.log({ data });
+    }
+  } catch (error) {
+    console.log({ error });
+  }
+};
+
+
+export const handleLike = async (Id, value, setIsUpdating, setLike) => {
+  setIsUpdating(true);
+  const headers = {
+    "Content-Type": "application/json",
+  };
+  const response = await axios({
+    url: STATS_ENDPOINT,
+    method: "post",
+    data: JSON.stringify({
+      videoId: Id,
+      watched: true,
+      isFavourited: value,
+    }),
+    headers: headers,
+  });
+  const { data } = response || {};
+  if (data) {
+    setLike(value);
+    setIsUpdating(false);
+  } else {
+    setIsUpdating(false);
+    console.log("Something went wrong!");
   }
 };

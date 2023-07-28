@@ -99,7 +99,7 @@ export const isExistingVideo = async (token, issuer, videoID) => {
   if (response?.errors) {
     console.log(response.errors);
   }
-  return response?.data?.stats?.length > 0;
+  return response?.data;
 };
 
 // Create new Stats in Hasura
@@ -144,10 +144,14 @@ export const updateVideoStats = async (
   isFavourited
 ) => {
   const updateStatsMutation = `
-  mutation MyMutation {
+  {
     update_stats(where: {userId: {_eq: "${issuer}"}, videoId: {_eq: "${videoID}"}}, _set: {favourited: ${isFavourited}, watched: ${isWatched}}) {
-      id
-      userId
+      returning {
+        favourited
+        userId
+        videoId
+        watched
+      }
     }
   }
 `;

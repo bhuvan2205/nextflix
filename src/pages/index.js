@@ -25,7 +25,7 @@ export default function Home({
           <section className="container mx-auto overflow-hidden">
             <Carousel title="Disney" videos={disneyVideos} size="large" />
             <Carousel
-              title="Watch again"
+              title="Watch it again"
               videos={productivityVideos}
               size="medium"
             />
