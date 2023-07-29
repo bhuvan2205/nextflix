@@ -107,7 +107,7 @@ export const fetchVideoData = async (Id, setLike) => {
       headers: headers,
     });
     const { data } = response || {};
-    if (data.isVideoExists) {
+    if (data?.isVideoExists) {
       setLike(data?.video.stats?.[0].favourited);
     } else {
       console.log({ data });

@@ -13,9 +13,10 @@ const handler = async (req, res) => {
         }
         const issuer = await getIssuer(token);
         removeTokenCookie(res);
-        await mAdmin.users.logoutByIssuer(issuer);
-        res.writeHead(302, { Location: "/login" });
-        res.end();
+        if (issuer !== null) {
+          await mAdmin.users.logoutByIssuer(issuer);
+          res.json({ message: "Cookie removed" });
+        }
       } catch (error) {
         res.status(500).json({ Error: error });
       }

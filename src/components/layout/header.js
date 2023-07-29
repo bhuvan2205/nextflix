@@ -1,24 +1,39 @@
-import { ROUTE_LOGIN } from "@/constants/endpoints";
 import Link from "next/link";
 import { magic } from "../../lib/magic-client";
-import { useRouter } from "next/router";
 import React, { useEffect, useState } from "react";
 import { useAtom } from "jotai";
 import { darkTheme } from "@/data/atoms/theme";
 import MoonIcon from "../icons/moon";
 import SunIcon from "../icons/sun";
+import { LOGOUT_ENDPOINT } from "@/constants/api-endpoints";
+import axios from "axios";
+import { useRouter } from "next/router";
+import { ROUTE_LOGIN } from "@/constants/endpoints";
 
 const Header = () => {
   const router = useRouter();
   const [theme, setTheme] = useAtom(darkTheme);
 
   const [emailId, setEmailId] = useState("User");
+  const [didToken, setDidToken] = useState("");
   const [loading, setLoading] = useState(false);
   const handleLogout = async () => {
     setLoading(true);
+    const headers = {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${didToken}`,
+    };
+
     try {
-      await magic.user.logout();
-      router.push(ROUTE_LOGIN);
+      const response = await axios({
+        url: LOGOUT_ENDPOINT,
+        method: "post",
+        headers: headers,
+      });
+      const { data } = response || {};
+      if (data?.message) {
+        router.push(ROUTE_LOGIN);
+      }
     } catch (error) {
       console.log({ error });
     }
@@ -27,8 +42,10 @@ const Header = () => {
     (async () => {
       try {
         const { email } = await magic.user.getMetadata();
+        const didToken = await magic.user.getIdToken();
         if (email) {
           setEmailId(email);
+          setDidToken(didToken);
         }
       } catch (error) {
         console.log({ error });
@@ -100,11 +117,7 @@ const Header = () => {
               <li className="pb-2 pl-2">
                 <span onClick={() => setTheme(!theme)}>
                   Theme
-                  {!!theme ? (
-                    <MoonIcon />
-                  ) : (
-                    <SunIcon />
-                  )}{" "}
+                  {!!theme ? <MoonIcon /> : <SunIcon />}{" "}
                 </span>
               </li>
               <li className="pb-2 pl-2">
