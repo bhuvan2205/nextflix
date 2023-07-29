@@ -2,6 +2,7 @@ import { createClient } from "pexels";
 import axios from "axios";
 import videos from "../data/videos.json";
 import { STATS_ENDPOINT } from "@/constants/api-endpoints";
+import { getFavouritedVideos, getWatchedVideos } from "./db/hasura";
 
 const API_KEY = process.env.YOUTUBE_API_KEY;
 const ENV = process.env.DEV_MODE;
@@ -19,7 +20,7 @@ export const getVideos = async (query = "disney") => {
     return data?.items?.map((item) => {
       return {
         title: item?.snippet?.title || "",
-        image: item?.snippet?.thumbnails?.high?.url || "",
+        image: `https://i.ytimg.com/vi/${item?.id?.videoId}/maxresdefault.jpg`,
         id: item?.id?.videoId || "",
       };
     });
@@ -68,7 +69,7 @@ export const getPopularVideos = async () => {
     return data?.items?.map((item) => {
       return {
         title: item?.snippet?.title || "",
-        image: item?.snippet?.thumbnails?.high?.url || "",
+        image: `https://i.ytimg.com/vi/${item?.id?.videoId}/maxresdefault.jpg`,
         id: item?.id || "",
       };
     });
@@ -116,7 +117,6 @@ export const fetchVideoData = async (Id, setLike) => {
   }
 };
 
-
 export const handleLike = async (Id, value, setIsUpdating, setLike) => {
   setIsUpdating(true);
   const headers = {
@@ -138,6 +138,30 @@ export const handleLike = async (Id, value, setIsUpdating, setLike) => {
     setIsUpdating(false);
   } else {
     setIsUpdating(false);
+    console.log("Something went wrong!");
+  }
+};
+
+export const fetchWatchedVideos = async (token, issuer) => {
+  try {
+    const videos = await getWatchedVideos(token, issuer);
+    return videos.map((video) => ({
+      id: video?.videoId,
+      image: `https://i.ytimg.com/vi/${video?.videoId}/maxresdefault.jpg`,
+    }));
+  } catch (error) {
+    console.log("Something went wrong!");
+  }
+};
+
+export const fetchFavouritedVideos = async (token, issuer) => {
+  try {
+    const videos = await getFavouritedVideos(token, issuer);
+    return videos.map((video) => ({
+      id: video?.videoId,
+      image: `https://i.ytimg.com/vi/${video?.videoId}/maxresdefault.jpg`,
+    }));
+  } catch (error) {
     console.log("Something went wrong!");
   }
 };

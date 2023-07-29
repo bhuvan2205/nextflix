@@ -24,12 +24,6 @@ const Banner = () => {
               <PlayIcon />
             </button>
           </div>
-          {/* <div className="w-1/2 pl-16 hidden md:block">
-            <div
-              className="h-64 w-full object-cover rounded-xl bg-[url('https://images.pexels.com/photos/4008733/pexels-photo-4008733.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2')] bg-center bg-cover"
-              alt="Layout Image"
-            />
-          </div> */}
         </div>
       </section>
     </>

@@ -1,4 +1,5 @@
 import axios from "axios";
+import { consoleErrors } from "../handleError";
 
 // Hasura graphQL endpoint
 const endPoint = process.env.GRAPHQL_ENDPOINT;
@@ -69,9 +70,7 @@ export const createNewuser = async (token, metadata) => {
     token,
     false
   );
-  if (response?.errors) {
-    console.log(response.errors);
-  }
+  consoleErrors(response);
   return response?.data;
 };
 
@@ -96,9 +95,7 @@ export const isExistingVideo = async (token, issuer, videoID) => {
     token,
     true
   );
-  if (response?.errors) {
-    console.log(response.errors);
-  }
+  consoleErrors(response);
   return response?.data;
 };
 
@@ -128,10 +125,7 @@ export const createNewStats = async (
     token,
     false
   );
-  if (response?.errors) {
-    console.log(response.errors);
-  }
-  console.log({response});
+  consoleErrors(response);
   return response?.data;
 };
 
@@ -162,8 +156,49 @@ export const updateVideoStats = async (
     token,
     false
   );
-  if (response?.errors) {
-    console.log(response.errors);
-  }
+  consoleErrors(response);
   return response?.data;
+};
+
+// To find the Watched videos from Hasura
+
+export const getWatchedVideos = async (token, issuer) => {
+  const getWatchedVideos = `
+  {
+    stats(where: {userId: {_eq: "${issuer}"}, watched: {_eq: true}}) 
+    {
+      videoId
+    }
+  }
+`;
+
+  const response = await fetchGraphQL(
+    "getWatchedVideos",
+    getWatchedVideos,
+    token,
+    true
+  );
+  consoleErrors(response);
+  return response?.data?.stats;
+};
+
+
+// To find the Favourited videos from Hasura
+
+export const getFavouritedVideos = async (token, issuer) => {
+  const getFavouritedVideos = `
+  {
+    stats(where: {userId: {_eq: "${issuer}"}, favourited: {_eq: 1}}) {
+      videoId
+    }
+  }`;
+
+  const response = await fetchGraphQL(
+    "getFavouritedVideos",
+    getFavouritedVideos,
+    token,
+    true
+  );
+  consoleErrors(response);
+  return response?.data?.stats;
 };

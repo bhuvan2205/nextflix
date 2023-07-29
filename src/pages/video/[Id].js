@@ -3,7 +3,6 @@ import HeartIcon from "@/components/icons/heart";
 import Home from "@/components/icons/home";
 import LikeIcon from "@/components/icons/like";
 import ThunderIcon from "@/components/icons/thunder";
-import { STATS_ENDPOINT } from "@/constants/api-endpoints";
 import { DEFAULT_LIKE_DISLIKE } from "@/constants/default";
 import { ROUTE_HOME } from "@/constants/endpoints";
 import { fetchVideoData, getVideoById, handleLike } from "@/lib/videos";

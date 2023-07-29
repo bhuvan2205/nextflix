@@ -3,8 +3,7 @@ import {
   isExistingVideo,
   updateVideoStats,
 } from "@/lib/db/hasura";
-
-const jwt = require("jsonwebtoken");
+import { getIssuer } from "@/lib/getIssuer";
 
 const handler = async (req, res) => {
   switch (req.method) {
@@ -17,24 +16,24 @@ const handler = async (req, res) => {
         if (!token) {
           return res.status(403).json({ Error: "Authorization required" });
         } else {
-          const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
+          const issuer = getIssuer(token);
           const data = await isExistingVideo(token, decoded?.issuer, videoId);
           const isVideoExists = data.stats?.length > 0;
-          console.log({ isVideoExists });
+          // update the video stats if video exists
           if (isVideoExists) {
-            // update the video stats
             const data = await updateVideoStats(
               token,
-              decoded?.issuer,
+              issuer,
               videoId,
               watched,
               isFavourited
             );
             return res.status(200).json({ data });
           } else {
+            // create the video stats
             const data = await createNewStats(
               token,
-              decoded?.issuer,
+              issuer,
               videoId,
               watched,
               isFavourited
@@ -55,8 +54,8 @@ const handler = async (req, res) => {
         if (!token) {
           return res.status(403).json({ Error: "Authorization required" });
         } else {
-          const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
-          const data = await isExistingVideo(token, decoded?.issuer, videoId);
+          const issuer = getIssuer(token);
+          const data = await isExistingVideo(token, issuer, videoId);
           const isVideoExists = data.stats?.length > 0;
           if (isVideoExists) {
             res.status(200).json({ video: data, isVideoExists: true });

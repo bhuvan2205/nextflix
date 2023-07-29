@@ -1,16 +1,18 @@
 import Head from "next/head";
-import { getPopularVideos, getVideos } from "../lib/videos";
+import { fetchWatchedVideos, getPopularVideos, getVideos } from "../lib/videos";
 import Layout from "@/components/layout/layout";
 import Carousel from "@/components/ui/carousel";
 import Banner from "@/components/ui/banner";
+import { getIssuer } from "@/lib/getIssuer";
+import { ROUTE_LOGIN } from "@/constants/endpoints";
 
 export default function Home({
   disneyVideos,
   popularVideos,
   productivityVideos,
   travelVideos,
+  watchedVideos,
 }) {
-  
   return (
     <>
       <Head>
@@ -24,8 +26,15 @@ export default function Home({
           <Banner />
           <section className="container mx-auto overflow-hidden">
             <Carousel title="Disney" videos={disneyVideos} size="large" />
+            {!!watchedVideos.length && (
+              <Carousel
+                title="Watched it again"
+                videos={watchedVideos}
+                size="small"
+              />
+            )}
             <Carousel
-              title="Watch it again"
+              title="Productivity"
               videos={productivityVideos}
               size="medium"
             />
@@ -38,11 +47,24 @@ export default function Home({
   );
 }
 
-export const getServerSideProps = async () => {
+export const getServerSideProps = async (context) => {
   const disneyVideos = await getVideos("disney");
   const popularVideos = await getPopularVideos();
   const productivityVideos = await getVideos("productivity");
   const travelVideos = await getVideos("travel");
+  const { token } = context?.req?.cookies;
+  const issuer = await getIssuer(token);
+  const watchedVideos = await fetchWatchedVideos(token, issuer);
+
+  if (!issuer) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: ROUTE_LOGIN,
+      },
+      props: {},
+    };
+  }
 
   return {
     props: {
@@ -50,6 +72,7 @@ export const getServerSideProps = async () => {
       popularVideos,
       productivityVideos,
       travelVideos,
+      watchedVideos,
     },
   };
 };
