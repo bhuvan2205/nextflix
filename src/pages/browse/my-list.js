@@ -20,7 +20,7 @@ const myList = ({ videos }) => {
       <>
         <Layout>
           <section className="container mx-auto overflow-hidden min-h-screen">
-            {false ? (
+            {!!videos?.length ? (
               <ListItem videos={videos} title="My List" />
             ) : (
               <>
@@ -45,7 +45,7 @@ export default myList;
 export const getServerSideProps = async (context) => {
   const { token } = context?.req?.cookies;
   const issuer = await getIssuer(token);
-  const watchedVideos = await fetchFavouritedVideos(token, issuer);
+  const videos = await fetchFavouritedVideos(token, issuer);
 
   if (!issuer) {
     return {
@@ -59,7 +59,7 @@ export const getServerSideProps = async (context) => {
 
   return {
     props: {
-      watchedVideos,
+      videos,
     },
   };
 };

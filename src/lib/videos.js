@@ -3,6 +3,7 @@ import axios from "axios";
 import videos from "../data/videos.json";
 import { STATS_ENDPOINT } from "@/constants/api-endpoints";
 import { getFavouritedVideos, getWatchedVideos } from "./db/hasura";
+import { consoleErrors } from "./handleError";
 
 const API_KEY = process.env.YOUTUBE_API_KEY;
 const ENV = process.env.DEV_MODE;
@@ -122,23 +123,25 @@ export const handleLike = async (Id, value, setIsUpdating, setLike) => {
   const headers = {
     "Content-Type": "application/json",
   };
-  const response = await axios({
-    url: STATS_ENDPOINT,
-    method: "post",
-    data: JSON.stringify({
-      videoId: Id,
-      watched: true,
-      isFavourited: value,
-    }),
-    headers: headers,
-  });
-  const { data } = response || {};
-  if (data) {
-    setLike(value);
+  try {
+    const response = await axios({
+      url: STATS_ENDPOINT,
+      method: "post",
+      data: JSON.stringify({
+        videoId: Id,
+        watched: true,
+        isFavourited: value,
+      }),
+      headers: headers,
+    });
+    const { data } = response || {};
+    if (data) {
+      setLike(value);
+    }
     setIsUpdating(false);
-  } else {
+  } catch (error) {
     setIsUpdating(false);
-    console.log("Something went wrong!");
+    console.log("Error", error?.message);
   }
 };
 

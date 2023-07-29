@@ -22,8 +22,8 @@ const Video = ({ video }) => {
     router.push(ROUTE_HOME);
   };
 
-  const handleVideoLike = (value) => {
-    handleLike(Id, value, setIsUpdating, setLike);
+  const handleVideoLike = async (value) => {
+    await handleLike(Id, value, setIsUpdating, setLike);
   };
 
   useEffect(() => {

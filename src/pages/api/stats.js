@@ -17,7 +17,7 @@ const handler = async (req, res) => {
           return res.status(403).json({ Error: "Authorization required" });
         } else {
           const issuer = getIssuer(token);
-          const data = await isExistingVideo(token, decoded?.issuer, videoId);
+          const data = await isExistingVideo(token, issuer, videoId);
           const isVideoExists = data.stats?.length > 0;
           // update the video stats if video exists
           if (isVideoExists) {
