@@ -8,6 +8,7 @@ import { ROUTE_HOME } from "@/constants/endpoints";
 import { fetchVideoData, getVideoById, handleLike } from "@/lib/videos";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import YouTube from "react-youtube";
 import Modal from "react-modal";
 
 Modal.setAppElement("#__next");
@@ -29,6 +30,9 @@ const Video = ({ video }) => {
   useEffect(() => {
     fetchVideoData(Id, setLike);
   }, []);
+  const onReady = (e) => {
+    console.log(e.target);
+  };
 
   const { description, title, publishTime, views, likes } = video || {};
   return (
@@ -43,13 +47,7 @@ const Video = ({ video }) => {
       <div className="flex flex-col items-center justify-center min-h-screen max-w-[60%] mx-auto">
         <div>
           <div className="rounded-md shadow-lg bg-gray-900 text-gray-100 overflow-hidden relative">
-            <iframe
-              id="player"
-              type="text/html"
-              src={`http://www.youtube.com/embed/${Id}?enablejsapi=1&origin=http://example.com&autoplay=1&rel=1`}
-              frameborder="0"
-              className="h-96 min-w-[360px] w-full"
-            ></iframe>
+            <YouTube videoId={Id} onReady={onReady} />
             <div className="absolute top-[60%] left-[10%]">
               <div className="flex gap-4">
                 <button
