@@ -70,7 +70,7 @@ export const getPopularVideos = async () => {
     return data?.items?.map((item) => {
       return {
         title: item?.snippet?.title || "",
-        image: `https://i.ytimg.com/vi/${item?.id?.videoId}/maxresdefault.jpg`,
+        image: `https://i.ytimg.com/vi/${item?.id}/maxresdefault.jpg`,
         id: item?.id || "",
       };
     });
